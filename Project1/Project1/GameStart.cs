@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,30 +11,39 @@ namespace Project1
     {
         static void Main(string[] args)
         {
+            Console.CursorVisible = false;
+
             // 인스턴스화
             Variable myVariable = new Variable();
             GamePrint myGamePrint = new GamePrint();
-            Character myCharacter = new Character();
-            Map myMap = new Map();
+            AttackSystem myAttackSystem = new AttackSystem();   
             Heal myHeal = new Heal();
-            NormalMonster myMonster = new NormalMonster();
-            MonsterCreate myMonsterCreate = new MonsterCreate();
-            AttackSystem myAttackSystem = new AttackSystem();
+            Shop myShop = new Shop();
             Event myEvent = new Event();
+            Item myItem = new Item();
+            MonsterCreate myMonsterCreate = new MonsterCreate();
+            NormalMonster myNormalMonster = new NormalMonster();
+            EliteMonster myEliteMonster = new EliteMonster();
+            BossMonster myBossMonster = new BossMonster();
 
-
-
+            Map myMap = new Map();
 
 
             // 변수
-            myMap.Get(myVariable);
-            myAttackSystem.Get(myVariable);
-            myCharacter.Get(myVariable);
-            myMonster.Get(myMonsterCreate, myCharacter);
+            myMap.Get(myVariable, myHeal, myNormalMonster, myEvent,
+                       myEliteMonster, myBossMonster, myShop, myItem);
+            myNormalMonster.Get(myVariable, myMonsterCreate, myAttackSystem
+                             , myGamePrint);
+            myEliteMonster.Get(myVariable, myMonsterCreate, myAttackSystem
+                             , myGamePrint);
+            myBossMonster.Get(myVariable, myMonsterCreate, myAttackSystem
+                            , myGamePrint);
             myHeal.Get(myVariable);
+            myAttackSystem.Get(myVariable, myMonsterCreate);
+            myMonsterCreate.Get(myVariable);
+            myShop.Get(myVariable, myItem);
+            myItem.Get(myVariable);
             myEvent.Get(myVariable);
-            
-
 
 
 
@@ -43,16 +53,33 @@ namespace Project1
             // 키 눌러서 시작
             myGamePrint.PressKey();
             // 캐릭터 선택
-            myCharacter.Select();
+            myVariable.Select();
+
+
             Console.WriteLine();
-            // 맵 생성
             myMap.MapCreate();
-            // 맵 출력
-            myMap.MapPrint();
+
+            // 맵 생성
 
 
-            // 데미지 방식 출력
-            myAttackSystem.AttackControl();
+
+            while (true)
+            {
+                // 맵 출력
+
+
+                myMap.MapPrint();
+
+
+                // 이동
+
+
+                myMap.MapMove();
+
+
+            }
+
+
 
         }
     }

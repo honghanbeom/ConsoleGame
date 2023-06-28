@@ -22,15 +22,15 @@ namespace Project1
         public void HealHP()
         {
             Console.WriteLine("유저의 체력 40%을 회복합니다.");
-            if (v.userMaxHP < v.userHP * 0.4)
+            if (v.userMaxHP < v.userCurrentHP * 1.4)
             {
-                v.userHP = v.userMaxHP;
-                Console.WriteLine("[체력  : {0}]", v.userHP);
+                v.userCurrentHP = v.userMaxHP;
+                Console.WriteLine("[체력  : {0}]", v.userCurrentHP);
             }
             else
             {
-                v.userHP = (int)(v.userHP * 1.4);
-                Console.WriteLine("[체력  : {0}]", v.userHP);
+                v.userCurrentHP = (int)(v.userCurrentHP * 1.4);
+                Console.WriteLine("[체력  : {0}]", v.userCurrentHP);
             }
 
         }

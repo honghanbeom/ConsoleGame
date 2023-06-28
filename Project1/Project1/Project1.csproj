@@ -44,11 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttackSystem.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="Monster\BossMonster.cs" />
     <Compile Include="Monster\EliteMonster.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="GamePrint.cs" />
-    <Compile Include="Character.cs" />
+    <Compile Include="Character+Variable.cs" />
     <Compile Include="GameStart.cs" />
     <Compile Include="Heal.cs" />
     <Compile Include="Map.cs" />
@@ -56,7 +57,6 @@
     <Compile Include="Monster\MonsterCreate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shop.cs" />
-    <Compile Include="Variable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
