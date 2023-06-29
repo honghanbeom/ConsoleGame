@@ -31,7 +31,7 @@ namespace Project1
 
             // 변수
             myMap.Get(myVariable, myHeal, myNormalMonster, myEvent,
-                       myEliteMonster, myBossMonster, myShop, myItem);
+                       myEliteMonster, myBossMonster, myShop, myItem, myGamePrint);
             myNormalMonster.Get(myVariable, myMonsterCreate, myAttackSystem
                              , myGamePrint);
             myEliteMonster.Get(myVariable, myMonsterCreate, myAttackSystem
@@ -41,27 +41,29 @@ namespace Project1
             myHeal.Get(myVariable);
             myAttackSystem.Get(myVariable, myMonsterCreate);
             myMonsterCreate.Get(myVariable);
-            myShop.Get(myVariable, myItem);
-            myItem.Get(myVariable);
+            myShop.Get(myVariable, myItem, myGamePrint);
+            myItem.Get(myVariable, myGamePrint);
             myEvent.Get(myVariable);
+            myVariable.Get(myGamePrint);
 
-
-
-            //실행
-
+            Console.Title = "Slay The Vampire";
+            Console.SetWindowSize(100, 40); 
 
             // 키 눌러서 시작
-            myGamePrint.PressKey();
+            myGamePrint.Title();
+            Console.Clear();
             // 캐릭터 선택
+   
             myVariable.Select();
 
-
+            //맵 생성
             Console.WriteLine();
             myMap.MapCreate();
 
-            // 맵 생성
+            // 아이템 생성
+            myItem.AddItem();
 
-
+            Console.Clear();
 
             while (true)
             {
@@ -75,6 +77,7 @@ namespace Project1
 
 
                 myMap.MapMove();
+                Console.Clear() ;
 
 
             }

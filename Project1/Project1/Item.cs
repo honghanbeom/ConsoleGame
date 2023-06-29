@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,30 +9,26 @@ namespace Project1
 {
     public class Item
     {
-        Variable v = new Variable();
+        // _getch()
+        [DllImport("msvcrt.dll")]
+        static extern char _getch();
 
-        public void Get(Variable var_)
+        Variable v = new Variable();
+        GamePrint g = new GamePrint();
+
+        public void Get(Variable var_, GamePrint g_)
         {
             this.v = var_;
+            this.g = g_;
         }
-        public string itemName;
-        public int itemPrice;
-
-
-        public void ItemInit(string itemName, int itemPrice)
-        { 
-            this.itemName = itemName;
-            this.itemPrice = itemPrice;
-        }
-           
-
 
         public void AddItem()
         {
+
             v.itemAll.Add("성공 포션", 50); // 성공 +1
             v.itemAll.Add("체력 포션", 50); // 체력 +20
             v.itemAll.Add("철갑 방어구", 50); // 방어구 +1
-            v.itemAll.Add("미스릴 방어구 ", 100); // 방어구 +3
+            v.itemAll.Add("미스릴 방어구", 100); // 방어구 +3
             v.itemAll.Add("아이언 메이스", 100); // 공격력 +10
             v.itemAll.Add("마검", 150); // 공격력 + 20
             v.itemAll.Add("고기", 100); // 체력이 50% 이하 -> 체력 +50
@@ -39,158 +36,487 @@ namespace Project1
             v.itemAll.Add("꾸깃한 복권", 0); // +10원
             v.itemAll.Add("신기한 버섯", 30); // 랜덤 성공+3, 실패 -3
             v.itemAll.Add("노예 상인의 목걸이", 200); // Elite, Boss 공격력+5,방어구+2
-            v.itemAll.Add("수리 단검", 300); // userDelay 증가
+            v.itemAll.Add("바람의 목걸이", 300); // userDelay 증가
         }
+
 
         public void ItemEffectOnInven()
         {
-            Console.WriteLine("[보유 아이템]");
-            for (int i = 0; i < v.itemInven.Count; i++)
+            Console.Clear();
+            g.GameMapPrint();
+            g.GameInfoPrint();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.SetCursorPosition(23,2);
+            Console.WriteLine("[소지한 아이템]");
+            Console.ResetColor();
+
+
+            int cursorLeft = 2;
+            int cursorTop = 4;
+            foreach (string n in v.itemInven)
             {
-                switch (v.shopList[i])
-                //--------------------------상점목록-------------------------------------
-                //v.itemAll.Add("성공 포션"); // 성공 +1
-                //v.itemAll.Add("체력 포션"); // 체력 +20
-                //v.itemAll.Add("철갑 방어구"); // 방어구 +1
-                //v.itemAll.Add("미스릴 방어구 "); // 방어구 +3
-                //v.itemAll.Add("아이언 메이스"); // 공격력 +10
-                //v.itemAll.Add("마검"); // 공격력 + 20
-                //v.itemAll.Add("고기"); // 체력이 50% 이하 -> 체력 +50
-                //v.itemAll.Add("배"); // 최대체력 +10
-                //v.itemAll.Add("꾸깃한 복권"); // +10원
-                //v.itemAll.Add("신기한 버섯"); // 랜덤 성공+3, 실패 -3
-                //v.itemAll.Add("바람의 목걸이"); // userDelay 증가
-                //----------------------------------------------------------------------
-                //v.itemAll.Add("노예 상인의 목걸이"); // Elite, Boss 공격력+5,방어구+2(되면)
-                //----------------------------------------------------------------------
+
+                if (cursorTop < 20)
                 {
-                    case "성공 포션":
-                        Console.WriteLine("[아이템 효과]");
-                        Console.WriteLine("[성공확률 +1]");
-                        v.userProb.Insert(1, v.success);
-                        int userSuccessCount = v.userProb.Count(x => x == v.success);
-                        Console.WriteLine("[유저 성공 갯수 : {0}]", userSuccessCount);
-                        break;
-                    case "체력 포션":
-                        Console.WriteLine("[아이템 효과]");
-                        Console.WriteLine("[체력 +20]");
-                        if (v.userMaxHP < v.userCurrentHP + 20)
-                        {
-                            v.userCurrentHP = v.userMaxHP;
-                            Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
-                        }
-                        else
-                        {
-                            v.userCurrentHP = +20;
-                            Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
-                        }
+                    Console.SetCursorPosition(cursorLeft, cursorTop);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(n);
+                    Console.ResetColor();
+                    cursorTop += 1;
 
-                        break;
-                    case "철갑 방어구":
-                        Console.WriteLine("[아이템 효과]");
+                }
+                else if (cursorTop >= 20)
+                {
+                    cursorLeft = 30;
+                    cursorTop = 4;
 
-                        Console.WriteLine("[방어력 +1]");
-                        v.userArmor += 1;
-                        Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
-
-
-                        break;
-                    case "미스릴 방어구":
-                        Console.WriteLine("[아이템 효과]");
-                        Console.WriteLine("[방어력 +3]");
-                        v.userArmor += 3;
-                        Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
-
-                        break;
-                    case "아이언 메이스":
-                        Console.WriteLine("[아이템 효과]");
-                        Console.WriteLine("[공격력 +10]");
-                        v.userDamage += 10;
-                        Console.WriteLine("[현재 공격력  : {0}]", v.userDamage);
-                        break;
-                    case "마검":
-                        Console.WriteLine("[아이템 효과]");
-
-                        Console.WriteLine("[공격력 +20]");
-                        v.userDamage += 20;
-                        Console.WriteLine("[현재 공격력  : {0}]", v.userDamage);
-
-                        break;
-                    case "고기":
-                        Console.WriteLine("[아이템 효과]");
-                        Console.WriteLine("[체력이 50% 이하 -> 체력 +50]");
-                        if (v.userMaxHP >= v.userCurrentHP * 0.5)
-                        {
-                            v.userCurrentHP += 50;
-                            Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
-                        }
-                        else
-                        {
-                            Console.WriteLine("[체력이 50%이상임으로 적용되지 않습니다.]");
-                        }
-
-                        break;
-                    case "배":
-                        Console.WriteLine("[아이템 효과]");
-
-                        Console.WriteLine("[최대 체력 +10]");
-                        v.userMaxHP += 10;
-                        Console.WriteLine("[최대 체력  : {0}]", v.userMaxHP);
-                        Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
-
-                        break;
-                    case "꾸깃한 복권":
-                        Console.WriteLine("[아이템 효과]");
-                        Console.WriteLine("[골드 + 10]");
-
-                        v.userGold += 10;
-                        Console.WriteLine("[유저 골드  : {0}]", v.userGold);
-
-                        break;
-                    case "신기한 버섯":
-                        Console.WriteLine("[아이템 효과]");
-
-                        Console.WriteLine("[50% 확률로 랜덤 성공+3 or 실패 -3]");
-                        Random random = new Random();
-                        int mushroomRandom = random.Next(0, 1);
-                        if (mushroomRandom == 0)
-                        {
-                            Console.WriteLine("3개의 실패확률+.");
-                            v.userProb.Add(v.fail);
-                            v.userProb.Add(v.fail);
-                            v.userProb.Add(v.fail);
-                        }
-                        else
-                        {
-                            v.userProb.Insert(1, v.success);
-                            v.userProb.Insert(1, v.success);
-                            v.userProb.Insert(1, v.success);
-                            Console.WriteLine("[성공확률 + 3]");
-                            userSuccessCount = v.userProb.Count(x => x == v.success);
-                            Console.WriteLine("[유저 성공 갯수 : {0}]", userSuccessCount);
-
-                        }
-
-                        break;
-                    case "노예 상인의 목걸이":
-                        Console.WriteLine("[아이템 효과]");
-
-                        Console.WriteLine("[Elite, Boss 공격력+5,방어구+2]");
-                        Console.WriteLine("아직 미구현임!");
-
-                        break;
-                    case "바람의 목걸이":
-                        Console.WriteLine("[아이템 효과]");
-                        Console.WriteLine("[userDelay  100 증가]");
-                        v.userDelay += 100;
-                        Console.WriteLine("[바 이동 속도 : {0}]",v.userDelay);
-
-                        break;
+                    Console.SetCursorPosition(cursorLeft, cursorTop);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(n);
+                    Console.ResetColor();
+                    cursorTop += 1;
                 }
 
+                if (n == "성공 포션")
+                {
 
+                    Console.SetCursorPosition(cursorLeft, cursorTop+1);
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[성공확률 +1]");
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    v.userProb.Insert(1, v.success);
+                    int userSuccessCount = v.userProb.Count(x => x == v.success);
+                    Console.WriteLine("[유저 성공 갯수 : {0}]", userSuccessCount);
+                    cursorTop += 4;
+                }
+                else if (n == "체력 포션")
+                {
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[체력 +20]");
+                    if (v.userMaxHP < v.userCurrentHP + 20)
+                    {
+                        Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                        v.userCurrentHP = v.userMaxHP;
+                        Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                        v.userCurrentHP += 20;
+                        Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
+                    }
+                    cursorTop += 4;
+
+                }
+                else if (n == "철갑 방어구")
+                {
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[방어력 +1]");
+                    v.userArmor += 1;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
+                    cursorTop += 4;
+
+                }
+                else if (n == "미스릴 방어구")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[방어력 +3]");
+                    v.userArmor += 3;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
+                    cursorTop += 4;
+
+                }
+                else if (n == "아이언 메이스")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[공격력 +10]");
+                    v.userDamage += 10;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("[현재 공격력  : {0}]", v.userDamage);
+                    cursorTop += 4;
+
+                }
+                else if (n == "마검")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[공격력 +20]");
+                    v.userDamage += 20;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("[현재 공격력  : {0}]", v.userDamage);
+                    cursorTop += 4;
+
+                }
+                else if (n == "고기")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[체력이 50%이하면 체력 +50]");
+                    if (v.userMaxHP >= v.userCurrentHP * 0.5)
+                    {
+                        Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                        v.userCurrentHP += 50;
+                        Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                        Console.WriteLine("[체력이 50%이상임으로 적용되지 않습니다.]");
+                    }
+                    cursorTop += 4;
+
+                }
+                else if (n == "배")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[최대 체력 +10]");
+                    v.userMaxHP += 10;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("[최대 체력  : {0}]", v.userMaxHP);
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 4);
+
+                    Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
+                    cursorTop += 5;
+
+                }
+                else if (n == "꾸깃한 복권")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[골드 + 10]");
+                    v.userGold += 10;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("[유저 골드  : {0}]", v.userGold);
+                    cursorTop += 4;
+
+                }
+                else if (n == "신기한 버섯")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[50% 확률로 랜덤 성공+3 or 실패 -3]");
+                    Random random = new Random();
+                    int mushroomRandom = random.Next(0, 2);
+                    if (mushroomRandom == 0)
+                    {
+                        Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                        Console.WriteLine("3개의 실패확률+.");
+                        v.userProb.Add(v.fail);
+                        v.userProb.Add(v.fail);
+                        v.userProb.Add(v.fail);
+                        cursorTop += 4;
+
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                        v.userProb.Insert(1, v.success);
+                        v.userProb.Insert(1, v.success);
+                        v.userProb.Insert(1, v.success);
+                        Console.WriteLine("[성공확률 + 3]");
+                        Console.SetCursorPosition(cursorLeft, cursorTop + 4);
+
+                        int userSuccessCount = v.userProb.Count(x => x == v.success);
+                        Console.WriteLine("[유저 성공 갯수 : {0}]", userSuccessCount);
+                        cursorTop += 5;
+
+                    }
+                }
+                else if (n == "노예 상인의 목걸이")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[Elite, Boss 공격력+5,방어구+2]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("아직 미구현임!");
+                    cursorTop += 4;
+
+                }
+                else if (n == "바람의 목걸이")
+                {
+
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[바의 이동속도  0.1초 증가]");
+                    v.userDelay += 100;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("[바 이동 속도 : {0}]", v.userDelay);
+                    cursorTop += 4;
+
+                }
+                else if (n == "스켈레톤 갑옷")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[방어력 +6]");
+                    v.userArmor += 6;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
+                    cursorTop += 4;
+
+                }
+                else if (n == "물컹물컹 장화")
+                {
+
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+                    Console.WriteLine("[아이템 효과]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 2);
+
+                    Console.WriteLine("[방어력 +3]");
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 3);
+
+                    Console.WriteLine("[바 이동속도 +0.05초 증가]");
+                    v.userArmor += 3;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 4);
+
+                    Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
+                    v.userDelay += 50;
+                    Console.SetCursorPosition(cursorLeft, cursorTop + 5);
+
+                    Console.WriteLine("[바 이동 속도 : {0}]", v.userDelay);
+                    cursorTop += 6;
+
+                }
             }
         }
-       
+
+        
+
     }
 }
+//public void ItemEffectOnInven()
+//{
+//    Console.WriteLine("[소지한 아이템]");
+//    for (int i = 0; i < v.itemInven.Count; i++)
+//    {
+//        switch (v.shopList[i])
+//        //--------------------------상점목록-------------------------------------
+//        //v.itemAll.Add("성공 포션"); // 성공 +1
+//        //v.itemAll.Add("체력 포션"); // 체력 +20
+//        //v.itemAll.Add("철갑 방어구"); // 방어구 +1
+//        //v.itemAll.Add("미스릴 방어구 "); // 방어구 +3
+//        //v.itemAll.Add("아이언 메이스"); // 공격력 +10
+//        //v.itemAll.Add("마검"); // 공격력 + 20
+//        //v.itemAll.Add("고기"); // 체력이 50% 이하 -> 체력 +50
+//        //v.itemAll.Add("배"); // 최대체력 +10
+//        //v.itemAll.Add("꾸깃한 복권"); // +10원
+//        //v.itemAll.Add("신기한 버섯"); // 랜덤 성공+3, 실패 -3
+//        //v.itemAll.Add("바람의 목걸이"); // userDelay 증가
+//        //----------------------------------------------------------------------
+//        //v.itemAll.Add("노예 상인의 목걸이"); // Elite, Boss 공격력+5,방어구+2(되면)
+//        //----------------------------------------------------------------------
+//        {
+//            case "성공 포션":
+//                Console.WriteLine("[아이템 효과]");
+//                Console.WriteLine("[성공확률 +1]");
+//                v.userProb.Insert(1, v.success);
+//                int userSuccessCount = v.userProb.Count(x => x == v.success);
+//                Console.WriteLine("[유저 성공 갯수 : {0}]", userSuccessCount);
+//                break;
+//            case "체력 포션":
+//                Console.WriteLine("[아이템 효과]");
+//                Console.WriteLine("[체력 +20]");
+//                if (v.userMaxHP < v.userCurrentHP + 20)
+//                {
+//                    v.userCurrentHP = v.userMaxHP;
+//                    Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
+//                }
+//                else
+//                {
+//                    v.userCurrentHP = +20;
+//                    Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
+//                }
+
+//                break;
+//            case "철갑 방어구":
+//                Console.WriteLine("[아이템 효과]");
+
+//                Console.WriteLine("[방어력 +1]");
+//                v.userArmor += 1;
+//                Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
+
+
+//                break;
+//            case "미스릴 방어구":
+//                Console.WriteLine("[아이템 효과]");
+//                Console.WriteLine("[방어력 +3]");
+//                v.userArmor += 3;
+//                Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
+
+//                break;
+//            case "아이언 메이스":
+//                Console.WriteLine("[아이템 효과]");
+//                Console.WriteLine("[공격력 +10]");
+//                v.userDamage += 10;
+//                Console.WriteLine("[현재 공격력  : {0}]", v.userDamage);
+//                break;
+//            case "마검":
+//                Console.WriteLine("[아이템 효과]");
+
+//                Console.WriteLine("[공격력 +20]");
+//                v.userDamage += 20;
+//                Console.WriteLine("[현재 공격력  : {0}]", v.userDamage);
+
+//                break;
+//            case "고기":
+//                Console.WriteLine("[아이템 효과]");
+//                Console.WriteLine("[체력이 50% 이하 -> 체력 +50]");
+//                if (v.userMaxHP >= v.userCurrentHP * 0.5)
+//                {
+//                    v.userCurrentHP += 50;
+//                    Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
+//                }
+//                else
+//                {
+//                    Console.WriteLine("[체력이 50%이상임으로 적용되지 않습니다.]");
+//                }
+
+//                break;
+//            case "배":
+//                Console.WriteLine("[아이템 효과]");
+
+//                Console.WriteLine("[최대 체력 +10]");
+//                v.userMaxHP += 10;
+//                Console.WriteLine("[최대 체력  : {0}]", v.userMaxHP);
+//                Console.WriteLine("[현재 체력  : {0}]", v.userCurrentHP);
+
+//                break;
+//            case "꾸깃한 복권":
+//                Console.WriteLine("[아이템 효과]");
+//                Console.WriteLine("[골드 + 10]");
+
+//                v.userGold += 10;
+//                Console.WriteLine("[유저 골드  : {0}]", v.userGold);
+
+//                break;
+//            case "신기한 버섯":
+//                Console.WriteLine("[아이템 효과]");
+
+//                Console.WriteLine("[50% 확률로 랜덤 성공+3 or 실패 -3]");
+//                Random random = new Random();
+//                int mushroomRandom = random.Next(0, 1);
+//                if (mushroomRandom == 0)
+//                {
+//                    Console.WriteLine("3개의 실패확률+.");
+//                    v.userProb.Add(v.fail);
+//                    v.userProb.Add(v.fail);
+//                    v.userProb.Add(v.fail);
+//                }
+//                else
+//                {
+//                    v.userProb.Insert(1, v.success);
+//                    v.userProb.Insert(1, v.success);
+//                    v.userProb.Insert(1, v.success);
+//                    Console.WriteLine("[성공확률 + 3]");
+//                    userSuccessCount = v.userProb.Count(x => x == v.success);
+//                    Console.WriteLine("[유저 성공 갯수 : {0}]", userSuccessCount);
+
+//                }
+
+//                break;
+//            case "노예 상인의 목걸이":
+//                Console.WriteLine("[아이템 효과]");
+
+//                Console.WriteLine("[Elite, Boss 공격력+5,방어구+2]");
+//                Console.WriteLine("아직 미구현임!");
+
+//                break;
+//            case "바람의 목걸이":
+//                Console.WriteLine("[아이템 효과]");
+//                Console.WriteLine("[바의 이동속도  0.1초 증가]");
+//                v.userDelay += 100;
+//                Console.WriteLine("[바 이동 속도 : {0}]",v.userDelay);
+
+//                break;
+//            case "스켈레톤 갑옷":
+//                Console.WriteLine("[아이템 효과]");
+//                Console.WriteLine("[방어력 +6]");
+//                v.userArmor += 6;
+//                Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
+//                break;
+//            case "물컹물컹 장화":
+//                Console.WriteLine("[아이템 효과]");
+//                Console.WriteLine("[방어력 +3]");
+//                Console.WriteLine("[바 이동속도 +0.05초 증가]");
+//                v.userArmor += 3;
+//                Console.WriteLine("[현재 방어력  : {0}]", v.userArmor);
+//                v.userDelay += 50;
+//                Console.WriteLine("[바 이동 속도 : {0}]", v.userDelay);
+//                break;
+//        }
+
+
+//    }
+//}

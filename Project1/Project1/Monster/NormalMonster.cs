@@ -46,6 +46,7 @@ namespace Project1
                     break;
                 case 1:
                     {
+                        // 말캉말캉한 장화 드롭
                         mc.MonsterInit("슬라임", 2, 10, 20, 0);
                         mc.NormalMonsterPrint("슬라임", 2, 10, 0);
 
@@ -53,8 +54,9 @@ namespace Project1
                     break;
                 case 2:
                     {
+                        // 늑대무리 소환
                         mc.MonsterInit("늑대", 7, 15, 15, 1);
-                        mc.NormalMonsterPrint("고블린", 7, 15, 1);
+                        mc.NormalMonsterPrint("늑대", 7, 15, 1);
                     }
                     break;
                 case 3:
@@ -67,6 +69,7 @@ namespace Project1
                     break;
                 case 4:
                     {
+                        // 스켈레톤 갑옷 드롭
                         mc.MonsterInit("스켈레톤", 6, 10, 15, 2);
                         mc.NormalMonsterPrint("스켈레톤", 6, 10, 2);
 
@@ -97,6 +100,51 @@ namespace Project1
                 v.userGold += mc.monsterMoney;
                 Console.WriteLine("[플레이어 체력 : {0}]", v.userCurrentHP);
                 Console.WriteLine("[유저 소지금 : {0}]", v.userGold);
+                if (mc.monsterName == "늑대")
+                {
+                    Random random = new Random();
+                    int wolfRandom = random.Next(0, 10);
+                    // 30%의 확률
+                    if (wolfRandom >= 7)
+                    {
+                        Console.WriteLine("늑대가 늑대무리를 불렀다!");
+                        _getch();
+                        WolfEvent();
+                        Fight();
+                    }
+                }
+                if (mc.monsterName == "스켈레톤")
+                {
+                    Random random = new Random();
+                    int skeletonRandom = random.Next(0, 10);
+                    // 20%의 확률
+                    if (skeletonRandom >= 8)
+                    {
+                        Console.WriteLine("스켈레톤이 아이템을 떨어뜨렸다!");
+                        Thread.Sleep(1000);
+                        Console.WriteLine("[스켈레톤 갑옷을 획득했다!]");
+                        v.itemInven.Add("[스켈레톤 갑옷]");
+                        Console.WriteLine("Press Any Key To Continue");
+                        _getch();
+
+                    }
+                }
+                if (mc.monsterName == "슬라임")
+                {
+                    Random random = new Random();
+                    int slimeRandom = random.Next(0, 10);
+                    // 10%의 확률
+                    if (slimeRandom >= 9)
+                    {
+                        Console.WriteLine("슬라임이 아이템을 떨어뜨렸다!");
+                        Thread.Sleep(1000);
+                        Console.WriteLine("[물컹물컹 장화를 획득했다!]");
+                        v.itemInven.Add("[물컹물컹 장화]");
+                        Console.WriteLine("Press Any Key To Continue");
+                        _getch();
+
+                    }
+                }
 
 
             }
@@ -107,6 +155,12 @@ namespace Project1
                 Environment.Exit(0);
             }
 
+        }
+
+        public void WolfEvent()
+        {
+            mc.MonsterInit("늑대무리", 12, 25, 25, 1);
+            mc.NormalMonsterPrint("늑대무리", 12, 25, 1);
         }
         
 

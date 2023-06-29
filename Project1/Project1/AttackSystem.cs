@@ -98,6 +98,7 @@ namespace Project1
                 {
                     v.spaceBar = true;
                     // 강제종료
+                    Thread.Sleep(2000);
                     thread2.Abort();
                     break;
                 }
@@ -122,7 +123,7 @@ namespace Project1
                             //{
                             //    v.userShow.Add(n);
                             //}
-
+                            Thread.Sleep(2000);
                             thread1.Abort();
                             return;
                         }
@@ -152,6 +153,7 @@ namespace Project1
                             //{
                             //    v.userShow.Add(n);
                             //}
+                            Thread.Sleep(2000);
 
                             thread1.Abort();
                             return;
@@ -217,7 +219,7 @@ namespace Project1
             else
             {
                 Random random = new Random();
-                int randomAttackIndex = random.Next(0, 1);
+                int randomAttackIndex = random.Next(2);
                 switch (randomAttackIndex)
                 {
                     case 0:
@@ -240,8 +242,7 @@ namespace Project1
 }
 
 
-
-
+#region LEGACY
 //public void Select()
 //{
 //    while (!v.spaceBar)
@@ -301,6 +302,7 @@ namespace Project1
 //        }
 //    }
 //}
+#endregion
 
 #region LEGACY
 

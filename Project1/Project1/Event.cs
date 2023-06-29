@@ -159,7 +159,10 @@ namespace Project1
             ConsoleKeyInfo sel = Console.ReadKey(true);
             switch (sel.Key)
             {
+
                 case ConsoleKey.D1:
+                    Console.CursorVisible = true;
+
                     Console.WriteLine("거실 금액을 입력해주세요");
                     Console.WriteLine("[유저 소지금 : {0}]", v.userGold);
                     ConsoleKeyInfo key = Console.ReadKey();
@@ -171,22 +174,30 @@ namespace Project1
                             Console.WriteLine("살해범의 승리");
                             v.userGold = v.userGold + x*2;
                             Console.WriteLine("[유저 소지금 : {0}]", v.userGold);
+                            Console.CursorVisible = false;
+
                         }
                         else if (randomIdx == 1)
                         {
                             Console.WriteLine("주인의 승리");
                             v.userGold -= x;
                             Console.WriteLine("[유저 소지금 : {0}]", v.userGold);
+                            Console.CursorVisible = false;
+
                         }
                         else
                         {
                             Console.WriteLine("돈을 가져와야지 뭐하는 짓이야?");
                             v.userGold = 0;
                             Console.WriteLine("[유저 소지금 : {0}]",v.userGold);
+                            Console.CursorVisible = false;
+
                         }
                     }
                     break;
                 case ConsoleKey.D2:
+                    Console.CursorVisible = true;
+
                     Console.WriteLine("거실 금액을 입력해주세요");
                     Console.WriteLine("[유저 소지금 : {0}]", v.userGold);
                     ConsoleKeyInfo key2 = Console.ReadKey();
@@ -198,18 +209,24 @@ namespace Project1
                             Console.WriteLine("살해범의 승리");
                             v.userGold -= y;
                             Console.WriteLine("[유저 소지금 : {0}]", v.userGold);
+                            Console.CursorVisible = false;
+
                         }
                         else if (randomIdx == 1)
                         {
                             Console.WriteLine("주인의 승리");
                             v.userGold = v.userGold + y * 2;
                             Console.WriteLine("[유저 소지금 : {0}]", v.userGold);
+                            Console.CursorVisible = false;
+
                         }
                         else
                         {
                             Console.WriteLine("돈을 가져와야지 뭐하는 짓이야?");
                             v.userGold = 0;
                             Console.WriteLine("[유저 소지금 : {0}]", v.userGold);
+                            Console.CursorVisible = false;
+
                         }
                     }
 

@@ -35,8 +35,9 @@ namespace Project1
 
         public void MonsterAdd()
         {
-            mc.MonsterInit("보스", 50, 500, 0, 10);
-            mc.EliteMonsterPrint("보스", 50, 500, 10);
+            // 보스 특수효과 흡혈, 석화(스턴), 혼란(확률안보이게)
+            mc.MonsterInit("뱀파이어", 50, 500, 0, 10);
+            mc.EliteMonsterPrint("뱀파이어", 50, 500, 10);
         }
 
         public void Fight()
@@ -63,6 +64,9 @@ namespace Project1
                 if (mc.monsterHP <= 0 && v.userCurrentHP > 0)
                 {
                     Console.WriteLine("전투가 완료되었습니다.");
+                    print.GameClear();
+                    Thread.Sleep(2000);
+                    Environment.Exit(0);
 
                 }
                 if (v.userCurrentHP <= 0)
