@@ -27,7 +27,7 @@ namespace Project1
         // AttackSystem
         public string fail = "□";
         public string success = "■";
-        public string userSelect = "│";
+        public string userSelect = "┃";
         public int index;
         public bool spaceBar = false;
 
@@ -132,7 +132,7 @@ namespace Project1
                     case ConsoleKey.D1:
                         Console.SetCursorPosition(38, 10);
 
-                        CharacterPrint("전사", 100, 10, 2, 100, 20);
+                        CharacterPrint("전사", 100, 2 ,10, 100, 20) ;
 
                         Console.SetCursorPosition(22, 17);
                         Console.WriteLine("체력이 많고, 가장 무난한 초보자용 캐릭터입니다.");
@@ -155,7 +155,7 @@ namespace Project1
                     case ConsoleKey.D2:
                         Console.SetCursorPosition(38, 10);
 
-                        CharacterPrint("도적", 80, 7, 1, 200, 15);
+                        CharacterPrint("도적", 80, 1, 7, 200, 15);
                         Console.SetCursorPosition(38, 17);
    
                         Console.SetCursorPosition(22, 17);
@@ -180,7 +180,7 @@ namespace Project1
                     case ConsoleKey.D3:
                         Console.SetCursorPosition(38, 10);
 
-                        CharacterPrint("마법사", 60, 20, 0, 120, 15);
+                        CharacterPrint("마법사", 60, 0, 20, 120, 15);
                         Console.SetCursorPosition(38, 17);
 
                         Console.SetCursorPosition(22, 17);
@@ -283,7 +283,7 @@ namespace Project1
         public void DevelopAdd()
         {
             // 바속도+, 골드+, 확률+, 데미지+, 아머-, 체력-
-            CharacterInit("개발자", 1000, 30, 100_000, 15, 1000, 0);
+            CharacterInit("개발자", 1000, 10, 100_000, 150, 1000, 0);
             userProb.Add(userSelect);
             userProb.Add(success);
             userProb.Add(success);
@@ -301,18 +301,109 @@ namespace Project1
             Console.Clear();
             g.GameMapPrint();
             g.GameInfoPrint();
-            Console.WriteLine("[유저 직업 : {0}]", userJob);
-            Console.WriteLine("[현재 체력 : {0}]", userCurrentHP);
-            Console.WriteLine("[최대 체력 : {0}]", userMaxHP);
-            Console.WriteLine("[공격력 : {0}]", userDamage);
-            Console.WriteLine("[방어력 : {0}]", userArmor);
+            Console.SetCursorPosition(23, 2);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("[유저 정보]");
+            Console.ResetColor();
+            Console.SetCursorPosition(18,5);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("[유저 직업 : ");
+            Console.ResetColor();
+            if (userJob == "전사")
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("{0}", userJob);
+                Console.ResetColor();
+                Console.Write("]");
+
+            }
+            if (userJob == "도적")
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("{0}", userJob);
+                Console.ResetColor();
+                Console.Write("]");
+
+
+            }
+            if (userJob == "마법사")
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("{0}", userJob);
+                Console.ResetColor();
+                Console.Write("]");
+
+
+            }
+            if (userJob == "개발자")
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("{0}", userJob);
+                Console.ResetColor();
+                Console.Write("]");
+
+
+            }
+            Console.WriteLine();
+            Console.SetCursorPosition(18, 6);
+
+            Console.Write("[현재 체력 :");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", userCurrentHP);
+            Console.ResetColor();
+            Console.Write("]");
+            Console.SetCursorPosition(18, 7);
+
+            Console.Write("[최대 체력 :");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", userMaxHP);
+            Console.ResetColor();
+            Console.Write("]");
+            Console.SetCursorPosition(18, 8);
+
+            Console.Write("[공격력 :");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", userDamage);
+            Console.ResetColor();
+            Console.Write("]");
+            Console.SetCursorPosition(18, 9);
+
+            Console.Write("[방어력 :");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", userArmor);
+            Console.ResetColor();
+            Console.Write("]");
+            Console.SetCursorPosition(18, 10);
+
             int userSuccessCount = userProb.Count(x => x == success);
             int userfailCount = userProb.Count(x => x == fail);
 
-            Console.WriteLine("[성공확률 : {0}]", userSuccessCount);
-            Console.WriteLine("[실패확률 : {0}]", userfailCount);
-            Console.WriteLine("[바 이동 속도 : {0}초]", userDelay*0.001);
-            Console.WriteLine("[소지금 : {0}]", userGold);
+            Console.Write("[성공 확률 :");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", userSuccessCount);
+            Console.ResetColor();
+            Console.Write("]");
+            Console.SetCursorPosition(18, 11);
+
+            Console.Write("[실패 확률 :");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", userfailCount);
+            Console.ResetColor();
+            Console.Write("]");
+            Console.SetCursorPosition(18, 12);
+
+            Console.Write("[바 이동속도 :");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", userDelay*0.001);
+            Console.ResetColor();
+            Console.Write("]");
+            Console.SetCursorPosition(18, 13);
+
+            Console.Write("[소지금 :");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", userGold);
+            Console.ResetColor();
+            Console.Write("]");
         }
 
     

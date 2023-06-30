@@ -35,9 +35,9 @@ namespace Project1
 
         public void MonsterAdd()
         {
-            // 보스 특수효과 흡혈, 석화(스턴), 혼란(확률안보이게)
+            // 보스 특수효과 흡혈, 피뿌리기(확률안보이게)
             mc.MonsterInit("뱀파이어", 50, 500, 0, 10);
-            mc.EliteMonsterPrint("뱀파이어", 50, 500, 10);
+            mc.BossMonsterPrint("뱀파이어", 50, 500, 10);
         }
 
         public void Fight()

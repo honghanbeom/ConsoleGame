@@ -35,7 +35,7 @@ namespace Project1
             v.itemAll.Add("배", 70); // 최대체력 +10
             v.itemAll.Add("꾸깃한 복권", 0); // +10원
             v.itemAll.Add("신기한 버섯", 30); // 랜덤 성공+3, 실패 -3
-            v.itemAll.Add("노예 상인의 목걸이", 200); // Elite, Boss 공격력+5,방어구+2
+            v.itemAll.Add("불가침", 200); // Elite, Boss 공격력+5,방어구+2
             v.itemAll.Add("바람의 목걸이", 300); // userDelay 증가
         }
 
@@ -189,7 +189,7 @@ namespace Project1
                     Console.WriteLine("[아이템 효과]");
                     Console.SetCursorPosition(cursorLeft, cursorTop + 2);
 
-                    Console.WriteLine("[체력이 50%이하면 체력 +50]");
+                    Console.WriteLine("[HP가 50%이하면 HP +50]");
                     if (v.userMaxHP >= v.userCurrentHP * 0.5)
                     {
                         Console.SetCursorPosition(cursorLeft, cursorTop + 3);
@@ -201,7 +201,7 @@ namespace Project1
                     {
                         Console.SetCursorPosition(cursorLeft, cursorTop + 3);
 
-                        Console.WriteLine("[체력이 50%이상임으로 적용되지 않습니다.]");
+                        Console.WriteLine("[50%이상에서는 적용X]");
                     }
                     cursorTop += 4;
 
@@ -249,7 +249,7 @@ namespace Project1
                     Console.WriteLine("[아이템 효과]");
                     Console.SetCursorPosition(cursorLeft, cursorTop + 2);
 
-                    Console.WriteLine("[50% 확률로 랜덤 성공+3 or 실패 -3]");
+                    Console.WriteLine("[랜덤으로 성공+3 or 실패 -3]");
                     Random random = new Random();
                     int mushroomRandom = random.Next(0, 2);
                     if (mushroomRandom == 0)
@@ -279,7 +279,7 @@ namespace Project1
 
                     }
                 }
-                else if (n == "노예 상인의 목걸이")
+                else if (n == "불가침")
                 {
 
                     Console.SetCursorPosition(cursorLeft, cursorTop + 1);
@@ -287,7 +287,7 @@ namespace Project1
                     Console.WriteLine("[아이템 효과]");
                     Console.SetCursorPosition(cursorLeft, cursorTop + 2);
 
-                    Console.WriteLine("[Elite, Boss 공격력+5,방어구+2]");
+                    Console.WriteLine("[미구현]");
                     Console.SetCursorPosition(cursorLeft, cursorTop + 3);
 
                     Console.WriteLine("아직 미구현임!");

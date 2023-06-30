@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Project1
@@ -18,8 +19,10 @@ namespace Project1
 
 
 
+
+
         public void GameClear()
-        { 
+        {
             Console.WriteLine("축하합니다! 승리하셨습니다.");
         }
 
@@ -54,7 +57,7 @@ namespace Project1
             Console.Write("_(____/____/____(___(__(___/______(_ ___/___/__(___ _");
             Console.SetCursorPosition(20, 9);
             Console.Write("                          /                          ");
-            Console.SetCursorPosition(20, 10);   
+            Console.SetCursorPosition(20, 10);
             Console.Write("                      (_ /                           ");
             Console.SetCursorPosition(20, 10);
 
@@ -82,6 +85,8 @@ namespace Project1
             _getch();
         }
 
+
+        // 전체프린트
         public void GameConsolePrint()
 
         {
@@ -90,15 +95,15 @@ namespace Project1
             int height = 40;
 
             // 보이는 영역
-            Console.SetWindowSize(width, height-5);
+            Console.SetWindowSize(width, height - 5);
             // 출력 영역
-            Console.SetBufferSize(width, height-5);
+            Console.SetBufferSize(width, height - 5);
 
 
 
             // Draw top line
             Console.Write(topLeftCorner);
-            for (int i = 0; i < width -12; i++)
+            for (int i = 0; i < width - 12; i++)
             {
                 Console.Write(horizontalLine);
             }
@@ -124,6 +129,8 @@ namespace Project1
             Console.WriteLine(bottomRightCorner);
         }
 
+
+        // 윗칸 출력
         public void GameMapPrint()
 
         {
@@ -168,6 +175,7 @@ namespace Project1
             Console.WriteLine(bottomRightCorner);
         }
 
+        // 밑칸 출력
         public void GameInfoPrint()
 
         {
@@ -191,7 +199,7 @@ namespace Project1
 
             // Draw middle lines
             // 원래 height - 12
-            for (int i =  30; i < height - 5; i++)
+            for (int i = 30; i < height - 5; i++)
             {
                 Console.Write(verticalLine);
                 for (int j = 0; j < width - 40; j++)
@@ -219,6 +227,9 @@ namespace Project1
         //public char horizontalLine = '━';
         //public char verticalLine = '┃';
         //public char space = ' ';
+
+
+        // 맵 정보칸
         public void GameEventPrint()
         {
             Console.SetCursorPosition(65, 3);
@@ -229,7 +240,7 @@ namespace Project1
             Console.Write("┃                   ┃");
             Console.SetCursorPosition(65, 6);
             Console.Write("┃                   ┃");
-            Console.SetCursorPosition(65, 7);             
+            Console.SetCursorPosition(65, 7);
             Console.Write("┃                   ┃");
             Console.SetCursorPosition(65, 8);
             Console.Write("┃                   ┃");
@@ -273,17 +284,158 @@ namespace Project1
         }
 
 
+        // 결제내역
+        public void GameShopPrint()
+        {
+            Console.SetCursorPosition(65, 13);
+            Console.Write("┏━━━━━━━[결제내역]━━━━━━━┓");
+            Console.SetCursorPosition(65, 14);
+            Console.Write("┃                        ┃");
+            Console.SetCursorPosition(65, 15);
+            Console.Write("┃                        ┃");
+            Console.SetCursorPosition(65, 16);
+            Console.Write("┃                        ┃");
+            Console.SetCursorPosition(65, 17);
+            Console.Write("┃                        ┃");
+            Console.SetCursorPosition(65, 18);
+            Console.Write("┗━━━━━━━━━━━━━━━━━━━━━━━━┛");
+        }
+
+        public void GameMonsterPrint()
+        {
+            Console.SetCursorPosition(65, 13);
+            Console.Write("┏━━━━━━━━[몬스터]━━━━━━━━━┓");
+            Console.SetCursorPosition(65, 14);
+            Console.Write("┃                         ┃");
+            Console.SetCursorPosition(65, 15);
+            Console.Write("┃                         ┃");
+            Console.SetCursorPosition(65, 16);
+            Console.Write("┃                         ┃");
+            Console.SetCursorPosition(65, 17);
+            Console.Write("┃                         ┃");
+            Console.SetCursorPosition(65, 18);
+            Console.Write("┗━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+        }
 
 
 
+        public void CatPrint()
+        {
+            Console.SetCursorPosition(16, 5);
+            Console.Write("   /\\__/\\");
+            Console.SetCursorPosition(16, 6);
+            Console.Write(" ꒰ ˶• ༝ •˶꒱ ~♡︎");
+            Console.SetCursorPosition(16, 7);
+            Console.Write("   / v v \\");
+            Console.SetCursorPosition(16, 8);
+            Console.Write("   |     |");
+            Console.SetCursorPosition(16, 9);
+            Console.Write("   づ__づ");
+
+        }
 
 
 
+        public void stoneGolemPrint()
+        {
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(22, 6);
+            Console.Write("⣤⣶⣶⣶⣶⣆⠀⣠⣬⣴⣂⢠⣴⣶⣶⣶⣦⡀");
+            Console.SetCursorPosition(22, 7);
+            Console.Write("⢠⡧⡅⠜⣿⣿⣿⡾⣿⣟⡿⣿⣾⢡⡧⠥⠿⣿⣷");
+            Console.SetCursorPosition(22, 8);
+            Console.Write("⠘⢃⣶⣃⣿⣯⣵⣩⣭⣭⣯⣽⣿⠸⠉⠏⢡⣿⣿⠄");
+            Console.SetCursorPosition(22, 9);
+            Console.Write("⠀⠑⠒⠚⣟⡛⣿⣿⣿⣿⣿⣽⣿⡶⠚⢒⢚⠛⠁⠀");
+            Console.SetCursorPosition(22, 10);
+            Console.Write("⠀⠀⢤⣴⣚⡃⠠⢲⠸⣻⣿⣧⣤⠢⣄⢑⠛⠢⢤⡀");
+            Console.SetCursorPosition(22, 11);
+            Console.Write("⠀⢈⡲⢚⣿⢇⠂⢻⣥⣜⣭⡿⠋⢲⣿⠠⡟⣛⡧⣿");
+            Console.SetCursorPosition(22, 12);
+            Console.Write("⢐⡯⡄⣽⡏⠘⣶⣿⣷⠄⠀⠙⣶⣿⠟⠀⢰⣨⢡⣿");
+            Console.SetCursorPosition(22, 13);
+            Console.Write("⢏⣘⣴⡿⠀⠆⠀⣶⣶⠀⠀⠆⠤⣴⣶⠀⣾⡒⣈⣿");
+            Console.SetCursorPosition(22, 14);
+            Console.Write("⠸⠿⠿⠁⢀⠬⠭⣿⣿⣆⠀⣀⠀⣼⣿⣆⠙⠿⠿⠋");
+            Console.ResetColor();
+
+        }
 
 
+        public void WyvernPrint()
+        {
+
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.SetCursorPosition(22, 6);
+            Console.Write("⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⡀⠀⢀⣀⡤⠶⠒⠚⠛⠃⠀⠀");
+            Console.SetCursorPosition(22, 7);
+
+            Console.Write("⠀⢀⡄⣠⣶⣿⣿⡇⠀⢐⣷⣶⡋⠁⠀⠀⢀⢀⠐⠀⠀⠀");
+            Console.SetCursorPosition(22, 8);
+
+            Console.Write("⠀⢠⣿⣿⣿⣿⣿⣧⣬⠿⣿⣿⣟⠛⠳⠦⣌⡀⠀⠀⠀⠀");
+            Console.SetCursorPosition(22, 9);
+
+            Console.Write("⠀⠈⠙⠻⣿⣿⣿⣿⡟⠁⣿⠀⢈⠳⡄⠀⠀⢙⡪⡄⠀⠀");
+            Console.SetCursorPosition(22, 10);
+
+            Console.Write("⠀⠀⠀⠄⣸⢳⣿⣿⣷⣿⡿⠠⠔⠀⠙⡆⡈⠀⠀⠀⠀⠀");
+            Console.SetCursorPosition(22, 11);
+
+            Console.Write("⠀⠀⢰⣾⣧⣿⣿⣿⣿⣿⣶⣶⡄⠀⠀⠘⠀⠀⠀⠀⠀⠀");
+            Console.SetCursorPosition(22, 12);
+
+            Console.Write("⠀⠀⣾⣿⣿⢿⣿⣋⠋⠙⢿⣿⣿⠀⠀⠀⢀⣀⡀⠀⠀⠀");
+            Console.SetCursorPosition(22, 13);
+
+            Console.Write("⠀⠰⣿⡿⣿⣻⣿⠆⣧⣀⣼⣿⣿⣦⣶⣾⠿⠛⠛⠆⠀⠀");
+            Console.SetCursorPosition(22, 14);
+
+            Console.Write("⠀⠀⠈⠉⠉⠉⠀⠈⠿⣿⡽⣿⣿⡛⠉⠁⠀⠀⠀⠀⠀⠀");
+            Console.SetCursorPosition(22, 15);
+
+            Console.Write("⠀⠀⠀⠀⠀⠀⠀⠀⠲⠿⠇⢴⣿⠆⠀⠀⠀⠀⠀⠀⠀⠀");
+            Console.ResetColor();
+
+        }
+
+        public void wMovePrint()
+        {
+
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
+            Console.SetCursorPosition(22,6);
+            Console.Write("⠀⠀⠀⡘⢆⠀⢘⣢⣳⣶⣶⣤⣄⠀⠀⠀⠀⠀⠀⣠⣀⣀");
+            Console.SetCursorPosition(22, 7);
+
+            Console.Write("⠀⠀⢰⢸⣄⣾⣿⣿⡇⣿⣿⣿⣿⣿⣦⠀⠀⠀⢰⣿⣿⣇");
+            Console.SetCursorPosition(22, 8);
+
+            Console.Write("⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⡿⢻⣿⣿⣿⣦⡄⠀⠈⢹⡏⠀");
+            Console.SetCursorPosition(22, 9);
+
+            Console.Write("⠀⠀⠀⣿⣿⣿⣿⣿⣿⢷⡇⣴⣿⣿⣿⣿⣇⠀⣀⣼⡇⠀");
+            Console.SetCursorPosition(22, 10);
+
+            Console.Write("⠀⠈⣿⣿⣿⣿⣿⣿⡿⠃⣿⣝⣿⣿⣿⣿⣿⣿⣿⡟⠁⠀");
+            Console.SetCursorPosition(22, 11);
+
+            Console.Write("⠀⡼⣿⣿⣿⣿⠀⠀⠀⠀⠙⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀");
+            Console.SetCursorPosition(22, 12);
+
+            Console.Write("⠀⠀⠹⣿⠏⠀⠀⠀⠀⠀⠀⠛⢿⣿⣿⣿⠿⠋⠀⠀⠀⠀");
+            Console.SetCursorPosition(22, 13);
+
+            Console.Write("⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣿⣿⡟⠀⠀⠀⠀⠀");
+            Console.SetCursorPosition(22, 14);
+
+            Console.Write("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠀⠀⠀⠀⠀");
+            Console.ResetColor();
+
+        }
 
     }
-
 
 
 }

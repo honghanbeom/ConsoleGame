@@ -67,7 +67,7 @@ namespace Project1
                 {
                     v.mapCreate[i] = v.elite; // 20% 확률로 elite
                 }
-                else if (randomNumber < 85)
+                else if (randomNumber < 85) //85,if
                 {
                     v.mapCreate[i] = v.randomEvent; // 15% 확률로 randomEvent
                 }
@@ -132,6 +132,14 @@ namespace Project1
 
                 }
 
+                if (str == v.clearStage)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.Write(str);
+                    Console.ResetColor();
+
+                }
+
 
                 if (str == v.heal)
                 {
@@ -157,9 +165,11 @@ namespace Project1
         // 이벤트가 끝나면 moveCount++ 해서 한칸 위로 플레이어를 옮김
         public void MapMove()
         {
+
+
             Console.SetCursorPosition(14, 28);
-            Console.WriteLine("아무키나 눌러 다음스테이지로 이동");
-            Console.SetCursorPosition(12, 29);
+            Console.WriteLine("[아무키나 눌러 다음스테이지로 이동]");
+            Console.SetCursorPosition(13, 29);
             Console.ForegroundColor= ConsoleColor.DarkGreen;
             Console.Write("[S : 상점]  ");
             Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -176,10 +186,10 @@ namespace Project1
                     // 동일 라운드 한번만 아이템 추가
                     if (v.resetCount == 0)
                     {
+
                         s.AddRandomItemsToShop();
                         v.resetCount++;
                     }
-                    // 동일 라운드 상점 리셋 불가
                     while (v.outCount == 0)
                     {
 
@@ -187,23 +197,25 @@ namespace Project1
                         s.ExplainItem();
                         s.BuyFromShop();
                     }
-                    // 상점초기화
-                    v.shopList.Clear();
-                    v.shopListAll.Clear();
-                    v.resetCount--;
                     v.outCount--;
                     break;
                 case ConsoleKey.E:
 
                     i.ItemEffectOnInven();
-                    Console.SetCursorPosition(17, 28);
+                    Console.SetCursorPosition(20, 28);
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+
                     Console.WriteLine("Press Any Key To Continue");
+                    Console.ResetColor();
+
                     _getch();
                     break;
                 case ConsoleKey.T:
                     v.Stat();
-                    Console.SetCursorPosition(17, 28);
+                    Console.SetCursorPosition(20, 28);
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
                     Console.WriteLine("Press Any Key To Continue");
+                    Console.ResetColor();
                     _getch();
                     break;
                 default:
@@ -233,12 +245,19 @@ namespace Project1
                     v.mapCreate[v.moveCount - 1] = v.userPosition;
                     v.mapCreate[v.moveCount] = v.clearStage;
                     v.moveCount--;
+                    ResetShop();
                     break;
             }
-
-            
-
+  
         }
+
+        public void ResetShop()
+        {
+            //상점 리롤 방지
+            v.resetCount--;
+            v.shopList.Clear();
+        }
+
         public void MapInfo()
         {
             Console.SetCursorPosition(71, 5);

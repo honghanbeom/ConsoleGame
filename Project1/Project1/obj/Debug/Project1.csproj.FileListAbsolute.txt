@@ -38,3 +38,11 @@ C:\Users\KGA\Desktop\homePro (2)\Project1\Project1\obj\Debug\Project1.csproj.Sug
 C:\Users\KGA\Desktop\homePro (2)\Project1\Project1\obj\Debug\Project1.csproj.CoreCompileInputs.cache
 C:\Users\KGA\Desktop\homePro (2)\Project1\Project1\obj\Debug\Project1.exe
 C:\Users\KGA\Desktop\homePro (2)\Project1\Project1\obj\Debug\Project1.pdb
+C:\Users\82104\Desktop\homePro (2)\Project1\Project1\bin\Debug\Project1.exe.config
+C:\Users\82104\Desktop\homePro (2)\Project1\Project1\bin\Debug\Project1.exe
+C:\Users\82104\Desktop\homePro (2)\Project1\Project1\bin\Debug\Project1.pdb
+C:\Users\82104\Desktop\homePro (2)\Project1\Project1\obj\Debug\Project1.csproj.AssemblyReference.cache
+C:\Users\82104\Desktop\homePro (2)\Project1\Project1\obj\Debug\Project1.csproj.SuggestedBindingRedirects.cache
+C:\Users\82104\Desktop\homePro (2)\Project1\Project1\obj\Debug\Project1.csproj.CoreCompileInputs.cache
+C:\Users\82104\Desktop\homePro (2)\Project1\Project1\obj\Debug\Project1.exe
+C:\Users\82104\Desktop\homePro (2)\Project1\Project1\obj\Debug\Project1.pdb

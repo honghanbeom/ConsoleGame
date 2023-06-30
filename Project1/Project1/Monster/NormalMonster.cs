@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,13 +23,13 @@ namespace Project1
         Variable v = new Variable();
         MonsterCreate mc = new MonsterCreate();
         AttackSystem att = new AttackSystem();
-        GamePrint print = new GamePrint();
+        GamePrint g = new GamePrint();
 
         public void Get(Variable v, MonsterCreate mc_, AttackSystem attack_,GamePrint print)
         { 
             this.v = v;
             this.att = attack_;
-            this.print = print;
+            this.g = print;
             this.mc = mc_;
         }
 
@@ -54,7 +55,7 @@ namespace Project1
                     break;
                 case 2:
                     {
-                        // 늑대무리 소환
+                        // 늑대무리 소환 (핫픽스 요함)
                         mc.MonsterInit("늑대", 7, 15, 15, 1);
                         mc.NormalMonsterPrint("늑대", 7, 15, 1);
                     }
@@ -80,12 +81,27 @@ namespace Project1
 
         public void Fight()
         {
+            Console.Clear();
+            g.GameMapPrint();
+            g.GameInfoPrint();
             MonsterAdd();
-            Console.WriteLine("[{0}와 전투를 시작합니다!]", mc.monsterName);
+            Console.SetCursorPosition(17, 2);
+            Console.Write("[");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", mc.monsterName);
+            Console.ResetColor();
+            Console.Write("와(과) 전투를 시작합니다!]");
+            Console.SetCursorPosition(20, 28);
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("[Press Any Key To Fight]");
+            Console.ResetColor();
             _getch();
             while (mc.monsterHP > 0 && v.userCurrentHP > 0)
             {
+
+                Console.SetCursorPosition(5, 28);
+                Console.WriteLine("                                        ");
+
                 att.AttackControl();
                 Thread.Sleep(1000);
                 mc.MonsterDamage();
@@ -96,35 +112,52 @@ namespace Project1
             }
             if (mc.monsterHP <= 0 && v.userCurrentHP > 0)
             {
+                Console.Clear();
+                g.GameMapPrint();
+                g.GameInfoPrint();
+                Console.SetCursorPosition(17, 5);
                 Console.WriteLine("전투가 완료되었습니다.");
                 v.userGold += mc.monsterMoney;
-                Console.WriteLine("[플레이어 체력 : {0}]", v.userCurrentHP);
-                Console.WriteLine("[유저 소지금 : {0}]", v.userGold);
-                if (mc.monsterName == "늑대")
-                {
-                    Random random = new Random();
-                    int wolfRandom = random.Next(0, 10);
-                    // 30%의 확률
-                    if (wolfRandom >= 7)
-                    {
-                        Console.WriteLine("늑대가 늑대무리를 불렀다!");
-                        _getch();
-                        WolfEvent();
-                        Fight();
-                    }
-                }
+
+                Console.SetCursorPosition(21, 6);
+                Console.Write("[유저 HP : ");
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write("{0}", v.userCurrentHP);
+                Console.ResetColor();
+                Console.Write("]");
+
+                Console.SetCursorPosition(19, 7);
+
+                Console.Write("[유저 골드 : ");
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write("{0}", v.userGold);
+                Console.ResetColor();
+                Console.Write("]");
                 if (mc.monsterName == "스켈레톤")
                 {
                     Random random = new Random();
                     int skeletonRandom = random.Next(0, 10);
-                    // 20%의 확률
-                    if (skeletonRandom >= 8)
+                    // 30%의 확률
+                    if (skeletonRandom >= 3)
                     {
-                        Console.WriteLine("스켈레톤이 아이템을 떨어뜨렸다!");
+                        Console.SetCursorPosition(10, 9);
+                        Console.Write("[");
+                        Console.ForegroundColor= ConsoleColor.Yellow;
+                        Console.Write("스켈레톤");
+                        Console.ResetColor();
+                        Console.Write("이 아이템을 떨어뜨렸다!]");
                         Thread.Sleep(1000);
-                        Console.WriteLine("[스켈레톤 갑옷을 획득했다!]");
+                        Console.SetCursorPosition(17, 10);
+                        Console.Write("[");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("스켈레톤 갑옷");
+                        Console.ResetColor();
+                        Console.Write(" 획득]");
                         v.itemInven.Add("[스켈레톤 갑옷]");
+                        Console.SetCursorPosition(20, 28);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Press Any Key To Continue");
+                        Console.ResetColor();
                         _getch();
 
                     }
@@ -133,35 +166,49 @@ namespace Project1
                 {
                     Random random = new Random();
                     int slimeRandom = random.Next(0, 10);
-                    // 10%의 확률
-                    if (slimeRandom >= 9)
+                    // 20%의 확률
+                    if (slimeRandom >= 8)
                     {
-                        Console.WriteLine("슬라임이 아이템을 떨어뜨렸다!");
+                        Console.SetCursorPosition(10, 9);
+                        Console.Write("[");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("슬라임");
+                        Console.ResetColor();
+                        Console.Write("이 아이템을 떨어뜨렸다!]");
                         Thread.Sleep(1000);
-                        Console.WriteLine("[물컹물컹 장화를 획득했다!]");
+                        Console.SetCursorPosition(17, 10);
+                        Console.Write("[");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("물컹물컹 장화");
+                        Console.ResetColor();
+                        Console.Write(" 획득]");
                         v.itemInven.Add("[물컹물컹 장화]");
+                        Console.SetCursorPosition(20, 28);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Press Any Key To Continue");
+                        Console.ResetColor();
                         _getch();
 
                     }
                 }
+                Console.SetCursorPosition(20, 28);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Press Any Key To Continue");
+                Console.ResetColor();
+                _getch();
 
 
             }
             if (v.userCurrentHP <= 0)
             {
-                print.GameOver();
+                g.GameOver();
                 Thread.Sleep(2000);
                 Environment.Exit(0);
             }
 
         }
 
-        public void WolfEvent()
-        {
-            mc.MonsterInit("늑대무리", 12, 25, 25, 1);
-            mc.NormalMonsterPrint("늑대무리", 12, 25, 1);
-        }
+
         
 
     }

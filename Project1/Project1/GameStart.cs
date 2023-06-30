@@ -11,6 +11,7 @@ namespace Project1
     {
         static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             Console.CursorVisible = false;
 
             // 인스턴스화
@@ -38,13 +39,15 @@ namespace Project1
                              , myGamePrint);
             myBossMonster.Get(myVariable, myMonsterCreate, myAttackSystem
                             , myGamePrint);
-            myHeal.Get(myVariable);
-            myAttackSystem.Get(myVariable, myMonsterCreate);
-            myMonsterCreate.Get(myVariable);
+            myHeal.Get(myVariable, myGamePrint);
+            myAttackSystem.Get(myVariable, myMonsterCreate, myGamePrint);
+            myMonsterCreate.Get(myVariable, myGamePrint);
             myShop.Get(myVariable, myItem, myGamePrint);
             myItem.Get(myVariable, myGamePrint);
-            myEvent.Get(myVariable);
+            myEvent.Get(myVariable, myGamePrint);
             myVariable.Get(myGamePrint);
+
+
 
             Console.Title = "Slay The Vampire";
             Console.SetWindowSize(100, 40); 

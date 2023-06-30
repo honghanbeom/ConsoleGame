@@ -12,10 +12,15 @@ namespace Project1
 {
     public class AttackSystem
     {
-        // 색깔 시스템
+
+        // _getch()
+        [DllImport("msvcrt.dll")]
+        static extern char _getch();
+
 
         Variable v = new Variable();
         MonsterCreate mc = new MonsterCreate();
+        GamePrint g = new GamePrint();
         public Thread thread1;
         public Thread thread2;
 
@@ -23,10 +28,11 @@ namespace Project1
         // 복사 리스트 v.userCopy
 
 
-        public void Get(Variable var_, MonsterCreate monster_)
+        public void Get(Variable var_, MonsterCreate monster_, GamePrint g_)
         {
             this.v = var_;
             this.mc = monster_;
+            this.g = g_;    
         }
 
 
@@ -54,11 +60,12 @@ namespace Project1
         public void RandomUserDamage()
         {
 
+
             Random random = new Random();
             // fail의 갯수 = countFail
-            int countFail = v.userCopy.Where(x => x.Equals(v.fail)).Count();
+            int countFail = v.userCopy.Count(x => x.Equals(v.fail));
             // 1 ~ fail의 갯수 중 랜덤 숫자 하나 생성(최소 한개)
-            int failmove = random.Next(1, countFail);
+            int failmove = random.Next(1, countFail + 1);
 
             // bar가 존재하기 때문에 index는 (+ 1) -> 이게 없음
             v.userCopy.RemoveRange(v.userCopy.Count - failmove, failmove);
@@ -98,7 +105,7 @@ namespace Project1
                 {
                     v.spaceBar = true;
                     // 강제종료
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
                     thread2.Abort();
                     break;
                 }
@@ -108,6 +115,11 @@ namespace Project1
         // bar의 위치를 한칸씩 앞으로 이동시킴 -> spacebar 누른 list를 userShow 넣기
         public void Select()
         {
+            Console.SetCursorPosition(20, 28);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("[Press SpaceBar To Attack]");
+            Console.ResetColor();
+
             while (!v.spaceBar)
             {
                 v.index = v.userCopy.IndexOf(v.userSelect);
@@ -123,20 +135,45 @@ namespace Project1
                             //{
                             //    v.userShow.Add(n);
                             //}
-                            Thread.Sleep(2000);
+                            Thread.Sleep(1000);
                             thread1.Abort();
                             return;
                         }
 
                         if (i + 1 < v.userCopy.Count)
                         {
+
+                            Console.SetCursorPosition(20, 29);
                             Swap(i, i + 1);
                             foreach (string n in v.userCopy)
                             {
-                                Console.Write("{0}", n);
+                                if (n == v.fail)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.Write(n);
+                                    Console.ResetColor();
+                                }
+                                else if (n == v.success)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.Write(n);
+                                    Console.ResetColor();
+
+                                }
+                                else if (n == v.userSelect)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.Write(n);
+                                    Console.ResetColor();
+
+                                }
+
+
+
                             }
                             Console.WriteLine();
                             Thread.Sleep(v.userDelay);
+       
                             v.index++;
                         }
                     }
@@ -153,7 +190,7 @@ namespace Project1
                             //{
                             //    v.userShow.Add(n);
                             //}
-                            Thread.Sleep(2000);
+                            Thread.Sleep(1000);
 
                             thread1.Abort();
                             return;
@@ -161,13 +198,35 @@ namespace Project1
 
                         if (i - 1 >= 0)
                         {
+
+                            Console.SetCursorPosition(20, 29);
                             Swap(i, i - 1);
                             foreach (string n in v.userCopy)
                             {
-                                Console.Write("{0}", n);
+                                if (n == v.fail)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.Write(n);
+                                    Console.ResetColor();
+                                }
+                                else if (n == v.success)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.Write(n);
+                                    Console.ResetColor();
+
+                                }
+                                else if (n == v.userSelect)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.Write(n);
+                                    Console.ResetColor();
+
+                                }
                             }
                             Console.WriteLine();
                             Thread.Sleep(v.userDelay);
+
                             v.index--;
                         }
                     }
@@ -191,45 +250,110 @@ namespace Project1
             //int userSelectIndex = userDamage.IndexOf(userSelect);
             //int failIndex = userDamage.IndexOf(fail);
             //int successIndex = userDamage.IndexOf(success);
+            Console.Clear();
+            g.GameMapPrint();
+            g.GameInfoPrint();
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(27, 5);
+            Console.Write("[결과]");
+            Console.ResetColor();
             // bar의 위치가 있는 함수를 출력
+            Console.SetCursorPosition(20, 6);
+            Console.Write("[");
             foreach (string n in v.userCopy)
             {
-                Console.Write(n);
+                if (n == v.fail)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(n);
+                    Console.ResetColor();
+                }
+                else if (n == v.success)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(n);
+                    Console.ResetColor();
+
+                }
+                else if (n == v.userSelect)
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write(n);
+                    Console.ResetColor();
+
+                }
             }
+            Console.Write("]");
+
+
+
 
             //bar 위치를 찾기 bar의 한칸 앞, 뒤 도 판단
+            // 인덱스 범위 초과 문제 가끔 발생하는 것 ? 도입으로 해결
             int userSelectIndex = v.userCopy.IndexOf(v.userSelect);
-            int upFailIndex = v.userCopy.FindIndex(userSelectIndex + 1, x => x == v.fail);
-            int upSuccessIndex = v.userCopy.FindIndex(userSelectIndex + 1, x => x == v.success);
-            int downFailIndex = v.userCopy.FindIndex(userSelectIndex - 1, x => x == v.fail);
-            int downSuccessIndex = v.userCopy.FindIndex(userSelectIndex - 1, x => x == v.success);
+            int upFailIndex = userSelectIndex + 1 < v.userCopy.Count ? v.userCopy.FindIndex(userSelectIndex + 1, x => x == v.fail) : -1;
+            int upSuccessIndex = userSelectIndex + 1 < v.userCopy.Count ? v.userCopy.FindIndex(userSelectIndex + 1, x => x == v.success) : -1;
+            int downFailIndex = userSelectIndex - 1 >= 0 ? v.userCopy.FindLastIndex(userSelectIndex - 1, x => x == v.fail) : -1;
+            int downSuccessIndex = userSelectIndex - 1 >= 0 ? v.userCopy.FindLastIndex(userSelectIndex - 1, x => x == v.success) : -1;
 
             //실패
             if (userSelectIndex + 1 == upFailIndex && userSelectIndex - 1 == downFailIndex)
             {
-                Console.WriteLine("공격 실패");
+
+
+                Console.SetCursorPosition(24, 7);
+                Console.Write("[");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("공격 실패");
+                Console.ResetColor();
+                Console.Write("]");
+                Console.ResetColor();
             }
 
             // 성공
             else if (userSelectIndex + 1 == upSuccessIndex && userSelectIndex - 1 == downSuccessIndex)
             {
+                Console.SetCursorPosition(24, 7);
+                Console.Write("[");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("공격 성공");
+                Console.ResetColor();
+                Console.Write("]");
                 mc.PlayerDamage();
             }
             else
             {
                 Random random = new Random();
-                int randomAttackIndex = random.Next(2);
+                int randomAttackIndex = random.Next(0,2);
                 switch (randomAttackIndex)
                 {
                     case 0:
-                        Console.WriteLine("공격 실패");
+                        Console.SetCursorPosition(24, 7);
+                        Console.Write("[");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("공격 실패");
+                        Console.ResetColor();
+                        Console.Write("]"); ;
+                        Console.ResetColor();
                         break;
                     case 1:
+                        Console.SetCursorPosition(24, 7);
+                        Console.Write("[");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("공격 성공");
+                        Console.ResetColor();
+                        Console.Write("]");
                         mc.PlayerDamage();
                         break;
                 }
             }
+            Console.ForegroundColor= ConsoleColor.Yellow;
+            Console.SetCursorPosition(20, 28);
+            Console.Write("Press Any Key To Continue");
+            Console.ResetColor();
+            _getch();
+
 
         }
 
