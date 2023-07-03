@@ -11,29 +11,32 @@ namespace Project1
 {
     public class Map
     {
+        #region 인스턴스화
         Heal h;
         Event e;
         Shop s;
         Item i;
-
         NormalMonster nm;
-        //MonsterCreate mc = new MonsterCreate();
         EliteMonster em;
         BossMonster bm;
         Variable v;
         GamePrint g;
+        #endregion
 
-        public string move;
-
+        #region P/Invoke 선언
         // _getch()
         [DllImport("msvcrt.dll")]
         static extern char _getch();
+        #endregion
+
+        #region Enum
         enum MapNum
         {
             heal, normal, elite, randomEvent
         }
- 
+        #endregion
 
+        #region 객체 초기화 메소드
         public void Get(Variable v, Heal heal_, NormalMonster nm_, Event e_,
              EliteMonster em_, BossMonster bm_, Shop s_, Item i_, GamePrint g_)
         {
@@ -47,8 +50,13 @@ namespace Project1
             this.i = i_;
             this.g = g_;
         }
+        #endregion
 
+        #region 지역변수
+        public string move;
+        #endregion
 
+        #region 맵 초기화 메소드
         public void MapCreate()
         {
 
@@ -59,17 +67,17 @@ namespace Project1
             {
                 int randomNumber = random.Next(0, 100); // 0부터 99 사이의 랜덤 값 생성
 
-                if (randomNumber < 50)
+                if (randomNumber < 35)
                 {
-                    v.mapCreate[i] = v.normal; // 50% 확률로 normal
+                    v.mapCreate[i] = v.normal; // 35% 확률로 normal
                 }
-                else if (randomNumber < 70)
+                else if (randomNumber < 60)
                 {
-                    v.mapCreate[i] = v.elite; // 20% 확률로 elite
+                    v.mapCreate[i] = v.elite; // 25% 확률로 elite
                 }
-                else if (randomNumber < 85) //85,if
+                else if (randomNumber < 85) 
                 {
-                    v.mapCreate[i] = v.randomEvent; // 15% 확률로 randomEvent
+                    v.mapCreate[i] = v.randomEvent; // 25% 확률로 randomEvent
                 }
                 else
                 {
@@ -77,7 +85,27 @@ namespace Project1
                 }
             }
         }
+        #endregion
 
+        #region 테스트용 맵 메소드
+        public void TestMap()
+        {
+            v.mapCreate[0] = v.boss;
+            v.mapCreate[11] = v.userPosition;
+            v.mapCreate[1] = v.heal;
+            v.mapCreate[2] = v.elite;
+            v.mapCreate[3] = v.randomEvent;
+            v.mapCreate[4] = v.elite;
+            v.mapCreate[5] = v.randomEvent;
+            v.mapCreate[6] = v.elite;
+            v.mapCreate[7] = v.normal;
+            v.mapCreate[8] = v.randomEvent;
+            v.mapCreate[9] = v.normal;
+            v.mapCreate[10] = v.normal;
+        }
+        #endregion
+
+        #region 맵 출력 메소드
         public void MapPrint()
         {
 
@@ -87,6 +115,7 @@ namespace Project1
             MapInfo();
             int printCount = 1;
             int barCount = 2;
+            // enum을 이용한 맵 출력
             foreach (string str in v.mapCreate)
             {
                 Console.SetCursorPosition(30,printCount);
@@ -149,20 +178,23 @@ namespace Project1
 
                 }
 
-
+                // 중간에 bar를 삽입해서 게임의 가독성 증가
                 if (str != v.mapCreate[11])
                 {
                     Console.SetCursorPosition(30,barCount);
 
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine("│");
+                    Console.ResetColor();
  
                     barCount += 2;
                 }
                 printCount += 2;
             }
         }
+        #endregion
 
-        // 이벤트가 끝나면 moveCount++ 해서 한칸 위로 플레이어를 옮김
+        #region 맵 이동과 이벤트 메소드
         public void MapMove()
         {
 
@@ -186,22 +218,30 @@ namespace Project1
                     // 동일 라운드 한번만 아이템 추가
                     if (v.resetCount == 0)
                     {
-
+                        // 중복없는 4개의 아이템 랜덤 프린트 메써드
                         s.AddRandomItemsToShop();
+                        // 리세마라 방지 카운트
                         v.resetCount++;
                     }
-                    while (v.outCount == 0)
+                    // 상점에서
+                    while (v.outCount == 0) // 상점에서 필요한 만큼 구매 카운트
                     {
-
+                        // 아이템 이름 프린트 메써드
                         s.PrintShop();
+                        // 아이템 설명 프린트 메써드
                         s.ExplainItem();
+                        // 상점에 구매 메써드
                         s.BuyFromShop();
+
                     }
+
+                    // 인벤 강제 활성화
+                    i.ItemEffectOnInven();
                     v.outCount--;
                     break;
                 case ConsoleKey.E:
-
-                    i.ItemEffectOnInven();
+                    // 인벤에서 아이템 효과 설명 메써드
+                    i.ItemEffectOnInven();                                      
                     Console.SetCursorPosition(20, 28);
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
 
@@ -211,6 +251,7 @@ namespace Project1
                     _getch();
                     break;
                 case ConsoleKey.T:
+                    // 유저의 스텟을 출력하는 메써드
                     v.Stat();
                     Console.SetCursorPosition(20, 28);
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -219,45 +260,53 @@ namespace Project1
                     _getch();
                     break;
                 default:
+                    // move를 정의를 통해 리펙토링
                     move = v.mapCreate[v.moveCount - 1];
                     if (move == v.heal)
                     {
-                        h.HealHP();
+                        h.HealHP(); // 힐 이벤트 메써드
                     }
                     else if (move == v.normal)
                     {
-                        nm.Fight();
+                        nm.Fight(); // 노멀 몬스터 이벤트 메써드
                     }
                     else if (move == v.elite)
                     {
-                        em.Fight();
+                        em.Fight(); // 엘리트 몬스터 이벤트 메써드
                     }
                     else if (move == v.randomEvent)
                     {
-                        e.RandomEvent();
+                        e.RandomEvent(); // 랜덤 이벤트 메써드
                     }
                     else if (move == v.boss)
                     {
-                        bm.Fight();
+                        bm.Fight(); // 보스 몬스터 이벤트 메써드
                     }
 
-                    // 이동
-                    v.mapCreate[v.moveCount - 1] = v.userPosition;
-                    v.mapCreate[v.moveCount] = v.clearStage;
+                    // 이벤트가 끝나면 moveCount++ 해서 한칸 위로(-) 플레이어를 옮김
                     v.moveCount--;
+                    v.mapCreate[v.moveCount + 1] = v.clearStage;
+                    v.mapCreate[v.moveCount] = v.userPosition;
+                    // 리세마라 방지 메써드
                     ResetShop();
                     break;
             }
-  
-        }
 
+
+        }
+        #endregion
+
+        #region 리세마라 방지 메소드
         public void ResetShop()
         {
-            //상점 리롤 방지
-            v.resetCount--;
+            // 리롤을 위한 카운트
+            v.resetCount = 0;
+            // 새 아이템을 위해 shopList를 지움
             v.shopList.Clear();
         }
+        #endregion
 
+        #region 맵 정보를 위한 출력 메소드
         public void MapInfo()
         {
             Console.SetCursorPosition(71, 5);
@@ -315,10 +364,7 @@ namespace Project1
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("X");
             Console.ResetColor();
-
-
-
-
         }
+        #endregion
     }
 }

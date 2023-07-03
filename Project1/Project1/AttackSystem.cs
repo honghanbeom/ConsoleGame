@@ -12,30 +12,35 @@ namespace Project1
 {
     public class AttackSystem
     {
-
+        #region P/Invoke 선언
         // _getch()
         [DllImport("msvcrt.dll")]
         static extern char _getch();
+        #endregion
 
-
+        #region 인스턴스화
         Variable v = new Variable();
         MonsterCreate mc = new MonsterCreate();
         GamePrint g = new GamePrint();
-        public Thread thread1;
         public Thread thread2;
+        public Thread thread1;
+        #endregion
 
-        // 원 리스트 v.userProb
-        // 복사 리스트 v.userCopy
+        #region 변수선언
+        // 보스 석화 스킬
+        public int petrificationCount = 0;
+        #endregion
 
-
+        #region 객체 초기화 메소드
         public void Get(Variable var_, MonsterCreate monster_, GamePrint g_)
         {
             this.v = var_;
             this.mc = monster_;
             this.g = g_;    
         }
+        #endregion
 
-
+        #region 공격 로직 메소드
         public void AttackControl()
         {
             Copy();
@@ -44,8 +49,9 @@ namespace Project1
             UserView();
             ResultDelete();
         }
+        #endregion
 
-
+        #region 유저의 확률 깊은복사 메소드
         // 유저의 확률(userProb)를 userCopy로 복사
         public void Copy()
         {
@@ -54,32 +60,31 @@ namespace Project1
                 v.userCopy.Add(n);
             }
         }
+        #endregion
 
-
+        #region 유저의 확률 랜덤화 메소드
         // Copy 함수의 끝을 랜덤으로 짤라서 앞으로 이동
         public void RandomUserDamage()
         {
-
-
             Random random = new Random();
             // fail의 갯수 = countFail
             int countFail = v.userCopy.Count(x => x.Equals(v.fail));
-            // 1 ~ fail의 갯수 중 랜덤 숫자 하나 생성(최소 한개)
-            int failmove = random.Next(1, countFail + 1);
+            // 1 ~ fail의 갯수 중 랜덤 숫자 하나 생성(최소 한개의 fail은 뒤에 있어야함)
+            int failmove = random.Next(1, countFail);
 
             // bar가 존재하기 때문에 index는 (+ 1) -> 이게 없음
             v.userCopy.RemoveRange(v.userCopy.Count - failmove, failmove);
 
             // bar가 0의 위치에 있다는 것을 생각하고, 제거한 것 만큼 추가
-            for (int i = 0; i <= failmove; i++)
+            for (int i = 0; i <= failmove-1; i++)
 
             {
                 v.userCopy.Insert(i + 1, v.fail);
             }
-
         }
+        #endregion
 
-
+        #region thread1,2 실행 메소드
         // UserInput과 Select의 함수를 thread로 실행시킴
         public void Spacebar()
         {
@@ -91,10 +96,10 @@ namespace Project1
 
             thread1.Join();
             thread2.Join();
-
-
         }
+        #endregion
 
+        #region thread1 메소드
         // Spacebar 입력시 thread2 종료
         public void UserInput()
         {
@@ -111,8 +116,10 @@ namespace Project1
                 }
             }
         }
+        #endregion
 
-        // bar의 위치를 한칸씩 앞으로 이동시킴 -> spacebar 누른 list를 userShow 넣기
+        #region thread2 메소드
+        // bar의 위치를 한칸씩 앞으로 스왑 -> spacebar 누른 list를 userShow 넣기
         public void Select()
         {
             Console.SetCursorPosition(20, 28);
@@ -120,8 +127,10 @@ namespace Project1
             Console.Write("[Press SpaceBar To Attack]");
             Console.ResetColor();
 
-            while (!v.spaceBar)
+            // 보스 석화 카운트가 없을 때
+            while (!v.spaceBar && petrificationCount == 0)
             {
+                // 인덱스를 통해 앞,뒤로 스왑 결정
                 v.index = v.userCopy.IndexOf(v.userSelect);
 
                 // bar가 0에 있는 경우
@@ -129,22 +138,20 @@ namespace Project1
                 {
                     for (int i = 0; i < v.userCopy.Count - 1; i++)
                     {
+                        // 스페이스 바 누르면 종료
                         if (v.spaceBar)
                         {
-                            //foreach(string n in v.userCopy)
-                            //{
-                            //    v.userShow.Add(n);
-                            //}
+                            // 바로종료시키면 불안정함
                             Thread.Sleep(1000);
                             thread1.Abort();
                             return;
                         }
-
                         if (i + 1 < v.userCopy.Count)
                         {
 
                             Console.SetCursorPosition(20, 29);
                             Swap(i, i + 1);
+                            // 출력로직
                             foreach (string n in v.userCopy)
                             {
                                 if (n == v.fail)
@@ -158,22 +165,18 @@ namespace Project1
                                     Console.ForegroundColor = ConsoleColor.Green;
                                     Console.Write(n);
                                     Console.ResetColor();
-
                                 }
                                 else if (n == v.userSelect)
                                 {
                                     Console.ForegroundColor = ConsoleColor.White;
                                     Console.Write(n);
                                     Console.ResetColor();
-
                                 }
-
-
-
                             }
+                            // userDelay 만큼 딜레이 출력
+                            // 이동효과 Animation
                             Console.WriteLine();
-                            Thread.Sleep(v.userDelay);
-       
+                            Thread.Sleep(v.userDelay);      
                             v.index++;
                         }
                     }
@@ -186,12 +189,8 @@ namespace Project1
                     {
                         if (v.spaceBar)
                         {
-                            //foreach (string n in v.userCopy)
-                            //{
-                            //    v.userShow.Add(n);
-                            //}
+                            // 바로 종료시키면 불안정
                             Thread.Sleep(1000);
-
                             thread1.Abort();
                             return;
                         }
@@ -201,6 +200,7 @@ namespace Project1
 
                             Console.SetCursorPosition(20, 29);
                             Swap(i, i - 1);
+                            // 출력 로직
                             foreach (string n in v.userCopy)
                             {
                                 if (n == v.fail)
@@ -224,17 +224,115 @@ namespace Project1
 
                                 }
                             }
+                            // userDelay 만큼 딜레이 출력
+                            // 이동효과 Animation
+                            Console.WriteLine();
+                            Thread.Sleep(v.userDelay);
+                            v.index--;
+                        }
+                    }
+                }
+            }
+
+            // 보스 효과 (석화)
+            // 기존의 출력과 동일하지만 출력 변수만 바뀜
+            while (petrificationCount == 1 && !v.spaceBar)
+            {
+                v.index = v.userCopy.IndexOf(v.userSelect);
+
+                // bar가 0에 있는 경우
+                if (v.index == 0)
+                {
+                    for (int i = 0; i < v.userCopy.Count - 1; i++)
+                    {
+                        if (v.spaceBar)
+                        {
+                            Thread.Sleep(1000);
+                            thread1.Abort();
+                            return;
+                        }
+
+                        if (i + 1 < v.userCopy.Count)
+                        {
+                            Console.SetCursorPosition(20, 29);
+                            Swap(i, i + 1);
+                            foreach (string n in v.userCopy)
+                            {
+                                if (n == v.fail)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("◆");
+                                    Console.ResetColor();
+                                }
+                                else if (n == v.success)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("◆");
+                                    Console.ResetColor();
+                                }
+                                else if (n == v.userSelect)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.Write(n);
+                                    Console.ResetColor();
+                                }
+                            }
                             Console.WriteLine();
                             Thread.Sleep(v.userDelay);
 
+                            v.index++;
+                        }
+                    }
+                }
+
+                // bar가 끝에 있는 경우
+                if (v.index == v.userCopy.Count - 1)
+                {
+                    for (int i = v.userCopy.Count - 1; i >= 1; i--)
+                    {
+                        if (v.spaceBar)
+                        {
+                            Thread.Sleep(1000);
+                            thread1.Abort();
+                            return;
+                        }
+
+                        if (i - 1 >= 0)
+                        {
+                            Console.SetCursorPosition(20, 29);
+                            Swap(i, i - 1);
+                            foreach (string n in v.userCopy)
+                            {
+                                if (n == v.fail)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("◆");
+                                    Console.ResetColor();
+                                }
+                                else if (n == v.success)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("◆");
+                                    Console.ResetColor();
+                                }
+                                else if (n == v.userSelect)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.Write(n);
+                                    Console.ResetColor();
+                                }
+                            }
+                            Console.WriteLine();
+                            Thread.Sleep(v.userDelay);
                             v.index--;
                         }
                     }
                 }
             }
         }
+        #endregion
 
-
+        #region 스왑 메소드
         // bar의 인덱스 이동을 위해 스왑
         public void Swap(int listOne, int listTwo)
         {
@@ -242,14 +340,12 @@ namespace Project1
             v.userCopy[listOne] = v.userCopy[listTwo];
             v.userCopy[listTwo] = temp;
         }
+        #endregion
 
-
+        #region 결과 판단 & 출력 메소드
         // UserCopy의 마지막을 판단
         public void UserView()
         {
-            //int userSelectIndex = userDamage.IndexOf(userSelect);
-            //int failIndex = userDamage.IndexOf(fail);
-            //int successIndex = userDamage.IndexOf(success);
             Console.Clear();
             g.GameMapPrint();
             g.GameInfoPrint();
@@ -258,9 +354,11 @@ namespace Project1
             Console.SetCursorPosition(27, 5);
             Console.Write("[결과]");
             Console.ResetColor();
+
             // bar의 위치가 있는 함수를 출력
             Console.SetCursorPosition(20, 6);
             Console.Write("[");
+
             foreach (string n in v.userCopy)
             {
                 if (n == v.fail)
@@ -281,13 +379,9 @@ namespace Project1
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.Write(n);
                     Console.ResetColor();
-
                 }
             }
             Console.Write("]");
-
-
-
 
             //bar 위치를 찾기 bar의 한칸 앞, 뒤 도 판단
             // 인덱스 범위 초과 문제 가끔 발생하는 것 ? 도입으로 해결
@@ -300,8 +394,6 @@ namespace Project1
             //실패
             if (userSelectIndex + 1 == upFailIndex && userSelectIndex - 1 == downFailIndex)
             {
-
-
                 Console.SetCursorPosition(24, 7);
                 Console.Write("[");
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -320,6 +412,7 @@ namespace Project1
                 Console.Write("공격 성공");
                 Console.ResetColor();
                 Console.Write("]");
+                // 플레이어가 공격
                 mc.PlayerDamage();
             }
             else
@@ -348,20 +441,21 @@ namespace Project1
                         break;
                 }
             }
-            Console.ForegroundColor= ConsoleColor.Yellow;
             Console.SetCursorPosition(20, 28);
+            Console.ForegroundColor= ConsoleColor.Yellow;
             Console.Write("Press Any Key To Continue");
             Console.ResetColor();
             _getch();
-
-
         }
+        #endregion
 
+        #region 복사함수 삭제 메소드
         // 초기에 존재하는 userShow와 userCopy 삭제
         public void ResultDelete()
         {
             v.userCopy.Clear();
         }
+        #endregion
     }
 }
 
